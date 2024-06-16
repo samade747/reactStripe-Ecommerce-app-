@@ -8,9 +8,19 @@ function App() {
 
   return (
     <>
-      
+      <Router>
+        <Switch>
+          <Route path="/pay">
+              < Pay />              
+          </Route>
 
-      
+          <Route path="/pay">
+              < Success />              
+          </Route>
+
+
+        </Switch>
+      </Router>      
     </>
   )
 
