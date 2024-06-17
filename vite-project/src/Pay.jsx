@@ -1,16 +1,36 @@
 import React from 'react'
 import StripeCheckout from 'react-stripe-checkout'
+import { useState, useEffect } from 'react'
+
 
 const publishableKey = ""
 
 
 const Pay = () => {
-
+    const [stripeToken, setStripeToken] = React.useState(null)
+    const history = useHistory()
 
     const handleToken = (token) => {
+        setStripeToken(token)
         console.log(token)
 
     }
+
+    useEffect(() => {
+        const makeRequest = async () => {
+            try {
+                const res = await axios.post("http://localhost:8080/api/checkout/payment", {
+                    tokenId: stripeToken.id,
+                    amount: 2000
+                })
+                console.log(res.data)
+                history.push('/success', { data: res.data })
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        stripeToken && makeRequest()
+    }, [stripeToken, history])
 
     return (
         <div
@@ -24,7 +44,7 @@ const Pay = () => {
             }}
         
         >
-
+(stripeToken ? "Payment Successful" : "Payment Processing")
 <StripeCheckout
     token={handleToken}
     stripeKey={publishableKey}
